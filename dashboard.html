@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>داشبورد ملك</title>
+<style>
+:root{--bg:#f5f2fc;--card:#fff;--c2:#efeaf9;--line:#e1d9f2;--tx:#191230;--mut:#6a6086;--pur:#7a2cff;--lime:#c8ff12;--red:#d92e45;--g:#008a69}
+@media(prefers-color-scheme:dark){:root{--bg:#110a1f;--card:#1b1230;--c2:#271b45;--line:#35275a;--tx:#f4efff;--mut:#a99fc6;--pur:#a678ff;--red:#ff7088;--g:#3ddfb0}}
+*{box-sizing:border-box;margin:0}body{font-family:Tahoma,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);padding:16px;max-width:1000px;margin:auto;line-height:1.6}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}h2{font-size:16px;margin-bottom:10px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));margin-top:14px}.mut{color:var(--mut);font-size:13px}
+.hero{display:flex;gap:18px;align-items:center;color:#fff;border-radius:26px;padding:22px;background:linear-gradient(135deg,#2b0a63,var(--m,#7a2cff))}
+.em{font-size:76px;line-height:1;display:inline-block}.hero h1{font-size:26px}.hero p{opacity:.92;margin-top:4px}
+.happy .em{animation:hop 1s infinite}.sad .em{animation:sway 3s infinite}.stress .em,.angry .em{animation:shk .35s infinite}.tired .em{animation:sway 5s infinite}.calm .em,.ok .em,.annoyed .em{animation:sway 4s infinite}
+@keyframes hop{50%{transform:translateY(-14px)}}@keyframes sway{50%{transform:rotate(8deg)}}@keyframes shk{50%{transform:translateX(4px)}}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center}
+.tile b{font-size:28px;display:block}.tile.hl{background:var(--lime);color:#0b0813;border-color:var(--lime)}.tile small{font-size:12px;opacity:.75}
+.live{margin-top:14px;background:var(--lime);color:#0b0813;border-radius:16px;padding:10px 16px;font-weight:700}
+.bars{display:flex;gap:8px;align-items:flex-end;height:120px}.bars div{flex:1;text-align:center;font-size:11px;color:var(--mut)}.bars i{display:block;border-radius:8px 8px 3px 3px;background:linear-gradient(var(--pur),#d91c78);margin-top:4px}
+.bar{height:8px;background:var(--c2);border-radius:8px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--pur)}
+.row{padding:9px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.row:first-of-type{border:0}
+.mo{display:flex;flex-wrap:wrap;gap:6px;font-size:24px}.red{color:var(--red)}
+#set{display:flex;gap:8px;margin-bottom:14px}#set input{flex:1;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--c2);color:var(--tx);direction:ltr}#set button{background:var(--lime);border:0;border-radius:12px;padding:0 18px;font-weight:700}
+</style></head><body>
+<div id="set"><input id="u" placeholder="رابط Apps Script (/exec)"><button onclick="sv()">حفظ</button></div>
+<div id="app"><div class="card mut">حطي رابط Apps Script فوق عشان تظهر البيانات.</div></div>
+<script>
+const MD={happy:['مبسوطة','😄','#00997a','فرحانة! ابعتلها حاجة حلوة أو شجّعها 🎉'],calm:['مرتاحة','😌','#2d6cdf','رايقة، سيبها تكمّل'],ok:['عادي','😐','#7a2cff','يوم عادي'],stress:['متوترة','😰','#e07a00','متوترة، طمّنها وخفف عنها'],annoyed:['متضايقة','😕','#d91c78','متضايقة، اسألها لو عايزة تفضفض'],sad:['زعلانة','😢','#5b4bd6','زعلانة، محتاجة دعم 🫂 كلمها'],tired:['تعبانة','😴','#4a3a80','تعبانة، خليها ترتاح'],angry:['غضبانة','😠','#e04545','غضبانة، سيبها شوية وبعدين كلمها بهدوء']};
+const U=()=>localStorage.getItem('gs')||'',$=s=>document.querySelector(s),e=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const DN=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],pd=s=>{const a=s.split('-').map(Number);return new Date(a[0],a[1]-1,a[2])};
+const ds=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+$('#u').value=U();function sv(){localStorage.setItem('gs',$('#u').value.trim());load()}
+async function load(){if(!U())return;try{const r=await fetch(U(),{cache:'no-store'});draw(await r.json())}catch(x){$('#app').innerHTML='<div class="card red">مقدرتش أقرا الشيت. اتأكدي إن الـDeployment على Anyone وإن الرابط صح.</div>'}}
+function draw(X){if(!X){$('#app').innerHTML='<div class="card mut">الشيت لسه فاضي. افتحي التطبيق وفعّلي الربط.</div>';return}
+const td=ds(new Date()),lm=X.moods[X.moods.length-1],m=lm&&MD[lm[1]],mx=Math.max(X.goal,...X.days.map(d=>d[1])),w=X.days.slice(-7),age=Math.round((Date.now()-X.ts)/6e4),live=X.tm&&X.tm[1]>Date.now();
+$('#app').innerHTML=(m?`<div class="hero ${lm[1]}" style="--m:${m[2]}"><span class="em">${m[1]}</span><div><h1>${m[0]}${lm[0]===td?' النهاردة':' (آخر مود: '+lm[0]+')'}</h1><p>${m[3]}</p>${lm[2]?'<p>السبب: '+e(lm[2])+'</p>':''}</div></div>`:'<div class="card mut">لسه مسجلتش مودها.</div>')
++(live?`<div class="live">⏱ بتذاكر دلوقتي: ${e(X.tm[0]||'مادة حرة')}</div>`:'')
++`<div class="tiles"><div class="tile hl"><b>${X.today}</b><small>دقيقة من ${X.goal}</small></div><div class="tile"><b>${X.streak}</b><small>أيام متتابعة</small></div><div class="tile"><b class="${X.over?'red':''}">${X.pend}</b><small>مهام${X.over?' ('+X.over+' متأخرة)':''}</small></div></div>`
++`<div class="grid"><div class="card"><h2>مذاكرة الأسبوع</h2><div class="bars">${w.map(d=>`<div>${d[1]||''}<i style="height:${Math.max(4,d[1]/mx*80)}px"></i>${DN[pd(d[0]).getDay()].slice(0,3)}</div>`).join('')}</div></div>`
++`<div class="card"><h2>المود آخر ١٤ يوم</h2><div class="mo">${X.days.map(d=>{const k=X.moods.filter(x=>x[0]===d[0]).pop();return`<span title="${d[0]}">${k?MD[k[1]][1]:'·'}</span>`}).join('')}</div></div>`
++`<div class="card"><h2>المواد</h2>${X.subs.map(s=>`<div><b style="color:${s[1]}">●</b> ${e(s[0])} <span class="mut">${s[3]}/${s[4]} موضوع · ${s[5]} د · ${s[6]} مهام</span><div class="bar"><i style="width:${s[2]}%"></i></div></div>`).join('')}</div>`
++`<div class="card"><h2>الامتحانات</h2>${X.exams.map(x=>{const n=Math.round((pd(x[2])-pd(td))/864e5);return`<div class="row"><span>${e(x[1])} ${e(x[0])}</span><span class="${n<=2?'red':''}">${n===0?'النهاردة':'بعد '+n+' يوم'} · جاهزية ${x[3]}%</span></div>`}).join('')||'<span class="mut">مفيش</span>'}</div>`
++`<div class="card"><h2>نقاط الضعف</h2>${X.weak.map(t=>`<div class="row"><span>${e(t[0])}</span><span class="mut">${e(t[1])} · ${t[2]}/5</span></div>`).join('')||'<span class="mut">مفيش</span>'}</div>`
++`<div class="card"><h2>آخر الجلسات</h2>${X.sess.map(s=>`<div class="row"><span>${e(s[1])} <span class="mut">${s[0]}</span></span><b>${s[2]} د</b></div>`).join('')||'<span class="mut">مفيش</span>'}</div></div>`
++`<p class="mut" style="text-align:center;margin-top:14px;${age>10?'color:var(--red)':''}">آخر تحديث من الموبايل: ${age<1?'دلوقتي':'من '+age+' دقيقة'}</p>`}
+load();setInterval(load,30000);
+</script></body></html>
